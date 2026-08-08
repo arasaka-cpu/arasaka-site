@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Download — ARASAKA</title>
-<meta name="description" content="Download the Arasaka rolling Linux ISO. One button: serves from Backblaze B2 when available, otherwise reassembles the GitHub release parts via a CDN worker, verifies the sha256, and saves the image.">
+<meta name="description" content="Download the Arasaka rolling Linux ISO. One button: streams from Backblaze B2 or reassembles the GitHub release parts via a CDN worker, verifies size and sha256, and refuses to save a truncated image.">
 <meta name="keywords" content="arasaka, arasaka-os, arasaka iso, download linux, linux iso, linux distro download, immutable linux, arch linux iso, cosmic desktop, live iso, rolling release">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ARASAKA">
@@ -86,7 +86,7 @@
       <div class="card green">
         <div class="icon">✓</div>
         <h3>Verified, always</h3>
-        <p>sha256 is checked in your browser during the download. A mismatch is reported loudly — you never boot an unverified image.</p>
+        <p>Size and sha256 are checked in your browser during the download. A dropped or truncated transfer is deleted and reported — you never boot an incomplete image.</p>
       </div>
     </div>
   </section>

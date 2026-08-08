@@ -98,6 +98,7 @@
 
     function streamToFile(url, expectedSha) {
       var hasStream = window.showSaveFilePicker;
+      var expectedTotal = manifest ? manifest.total : 0;
       if (!hasStream) {
         saveViaAnchor(url);
         setStatus("Download started in your browser.");
@@ -106,7 +107,9 @@
       }
       return fetch(url, { mode: "cors" }).then(function (r) {
         if (!r.ok) throw new Error("HTTP " + r.status);
-        var total = parseInt(r.headers.get("content-length"), 10) || 0;
+        // content-length is stripped by Cloudflare for streamed worker bodies;
+        // trust the manifest size instead, and verify we actually got it all.
+        var total = expectedTotal;
         if (!r.body) throw new Error("no stream");
         var hasher = new Sha256();
         var got = 0;
@@ -136,6 +139,19 @@
                 });
               }
               return pump().then(function () {
+                // Hard failure on truncation: a partial ISO is worse than
+                // no ISO. Delete it and tell the user what happened.
+                if (total && got !== total) {
+                  var done = Promise.resolve();
+                  if (handle.remove) {
+                    done = handle.remove().catch(function () {});
+                  }
+                  return done.then(function () {
+                    setStatus("Download INCOMPLETE — got " + fmt(got) + " of " + fmt(total) + ". The mirror dropped the connection mid-transfer.");
+                    setDetail("No file saved. Try again, or grab it manually at " + GH_RELEASE);
+                    throw new Error("truncated download (" + got + "/" + total + " bytes)");
+                  });
+                }
                 setProgress(100);
                 var digest = hasher.digest();
                 if (expectedSha && digest !== expectedSha.toLowerCase()) {
