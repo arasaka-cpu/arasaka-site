@@ -16,7 +16,7 @@
  * GitHub release page.
  */
 (function () {
-  var WORKER = "https://arasaka-dl.YOUR-SUBDOMAIN.workers.dev";
+  var WORKER = "https://arasaka-dl.old-hickory1.workers.dev";
   var B2_BASE = "https://f005.backblazeb2.com/file/arasaka-iso/";
   var GH_RELEASE = "https://github.com/arasaka-cpu/arasaka/releases/tag/rolling";
 
