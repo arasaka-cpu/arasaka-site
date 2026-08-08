@@ -1,23 +1,20 @@
 /*
  * Arasaka single-button downloader.
  *
- * Order of operations (one button, availability-based):
+ * Order of operations (one button):
  *   1. Ask the assembler worker for the current ISO manifest (name/size/sha256).
- *   2. Probe B2 for the single-file ISO (fast CDN path, no assembly needed).
- *      If B2 answers (public + CORS), stream from there.
- *      Otherwise fall back to the worker's /download, which reassembles the
- *      GitHub .part.NN files server-side and streams the one ISO.
+ *   2. Stream /download from the worker, which serves the image from the
+ *      fastest available mirror server-side (no CORS issues, no assembly in
+ *      the browser).
  *   3. Stream to disk with a live progress bar, hashing every byte with an
  *      incremental SHA-256 as it arrives, and report the final digest so the
  *      image is verified before it's ever used.
  *
- * Requires a deployed worker (see worker/README.md) for the GitHub-assembly
- * path. If no worker is configured, the button degrades to opening the
- * GitHub release page.
+ * Requires a deployed worker (see worker/README.md). If no worker is
+ * configured, the button degrades to opening the release page.
  */
 (function () {
   var WORKER = "https://arasaka-dl.old-hickory1.workers.dev";
-  var B2_BASE = "https://f005.backblazeb2.com/file/arasaka-iso/";
   var GH_RELEASE = "https://github.com/arasaka-cpu/arasaka/releases/tag/rolling";
 
   var btn = document.getElementById("dl-btn");
@@ -70,19 +67,9 @@
       });
     }
 
-    function fromB2() {
-      if (!manifest) return Promise.reject(new Error("no manifest"));
-      var url = B2_BASE + encodeURIComponent(manifest.file);
-      return fetch(url, { method: "HEAD", mode: "cors" }).then(function (r) {
-        if (!r.ok) throw new Error("B2 HTTP " + r.status);
-        setDetail("Source: Backblaze B2 direct");
-        return url;
-      });
-    }
-
     function fromWorkerDL() {
       if (WORKER.indexOf("YOUR-SUBDOMAIN") !== -1) throw new Error("no worker configured");
-      setDetail("Source: GitHub parts, reassembled by the CDN worker");
+      setDetail("Source: CDN worker");
       return Promise.resolve(WORKER.replace(/\/$/, "") + "/download");
     }
 
@@ -148,7 +135,7 @@
                   }
                   return done.then(function () {
                     setStatus("Download INCOMPLETE — got " + fmt(got) + " of " + fmt(total) + ". The mirror dropped the connection mid-transfer.");
-                    setDetail("No file saved. Try again, or grab it manually at " + GH_RELEASE);
+                    setDetail("No file saved. Try again.");
                     throw new Error("truncated download (" + got + "/" + total + " bytes)");
                   });
                 }
@@ -169,11 +156,11 @@
     }
 
     fromWorker()
-      .then(fromB2)
+      .then(fromWorkerDL)
       .catch(function () {
         if (manifest) return fromWorkerDL();
-        return fromWorker().then(fromB2).catch(function () {
-          setStatus("No worker configured yet — opening the GitHub release.");
+        return fromWorker().then(fromWorkerDL).catch(function () {
+          setStatus("No worker configured yet — opening the release page.");
           window.open(GH_RELEASE, "_blank");
           return null;
         });
@@ -184,7 +171,7 @@
       })
       .catch(function (e) {
         setStatus("Download failed: " + (e && e.message ? e.message : e));
-        setDetail("You can also grab it manually at " + GH_RELEASE);
+        setDetail("Try again in a moment.");
       })
       .then(function () {
         active = false;

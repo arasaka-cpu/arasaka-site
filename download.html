@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Download — ARASAKA</title>
-<meta name="description" content="Download the Arasaka rolling Linux ISO. One button: streams from Backblaze B2 or reassembles the GitHub release parts via a CDN worker, verifies size and sha256, and refuses to save a truncated image.">
+<meta name="description" content="Download the Arasaka rolling Linux ISO. One button: streams from a CDN worker, verifies size and sha256, and refuses to save a truncated image.">
 <meta name="keywords" content="arasaka, arasaka-os, arasaka iso, download linux, linux iso, linux distro download, immutable linux, arch linux iso, cosmic desktop, live iso, rolling release">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ARASAKA">
@@ -57,12 +57,11 @@
     <h2 class="sec">How it works</h2>
     <p>
       The button asks the CDN worker for the current ISO manifest. The worker
-      streams the single-file image from <b>Backblaze B2</b> (server-side, no
-      browser CORS needed), falling back to reassembling the GitHub release's
-      split parts (each capped at 1&nbsp;GiB) when B2 is unreachable. Either way
-      the browser hashes every byte it receives and you see <b>verified</b>
-      only when the byte count matches the manifest <i>and</i> the sha256
-      matches the release.
+      streams the image from the fastest available source (server-side, no
+      browser CORS needed), falling back to reassembling split parts when a
+      source is unreachable. Either way the browser hashes every byte it
+      receives and you see <b>verified</b> only when the byte count matches the
+      manifest <i>and</i> the sha256 matches the release.
     </p>
     <p>
       No JavaScript runs the pretty page — only this button needs it, and the
@@ -75,13 +74,13 @@
     <div class="grid">
       <div class="card cyan">
         <div class="icon">🗄</div>
-        <h3>Backblaze B2</h3>
-        <p>Bucket <code>arasaka-iso</code>, full single-file ISO. Streamed by the worker server-side (no browser CORS needed).</p>
+        <h3>Redundant mirrors</h3>
+        <p>Every build is pushed to multiple independent sources. The worker picks the fastest reachable one, automatically.</p>
       </div>
       <div class="card magenta">
         <div class="icon">🧩</div>
-        <h3>GitHub rolling release</h3>
-        <p>Split <code>.part.NN</code> assets with a <code>.parts.json</code> manifest. Reassembled on the fly by the worker as a fallback.</p>
+        <h3>Split parts fallback</h3>
+        <p>Large images are also published as numbered split parts with a manifest. The worker reassembles them on the fly when the single-file source is slow or down.</p>
       </div>
       <div class="card green">
         <div class="icon">✓</div>
@@ -100,7 +99,7 @@
 </main>
 
 <footer>
-  <p>ARASAKA · download · <a href="https://github.com/arasaka-cpu/arasaka/releases/tag/rolling" target="_blank" rel="noopener">rolling release</a> · <a href="https://github.com/arasaka-cpu/arasaka" target="_blank" rel="noopener">source</a></p>
+  <p>ARASAKA · download · <a href="https://github.com/arasaka-cpu/arasaka" target="_blank" rel="noopener">source</a></p>
 </footer>
 
 <script src="assets/js/loader.js" defer></script>
