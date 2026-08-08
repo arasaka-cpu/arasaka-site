@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About — ARASAKA</title>
+<meta name="description" content="About the Arasaka project: philosophy, architecture, and how the immutable Arch + COSMIC desktop OS is built.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ff2e88' d='M12 2 2 22h20Z'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="scanlines">
+<canvas id="bg" aria-hidden="true"></canvas>
+
+<nav>
+  <a class="logo" href="index.html"><span class="tri">▲</span>ARASAKA</a>
+  <ul>
+    <li><a class="link" href="index.html">Home</a></li>
+    <li><a class="link" href="about.html" aria-current="page">About</a></li>
+    <li><a class="link" href="missions.html">Missions</a></li>
+    <li><a class="link" href="download.html">Download</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <span class="badge">● the philosophy</span>
+  <h1 class="glitch" data-text="ABOUT">ABOUT</h1>
+  <p class="sub">
+    Arasaka is a desktop operating system that treats the OS as a verifiable,
+    replaceable artifact instead of a permanent home. You work <i>on</i> it,
+    not <i>in</i> it.
+  </p>
+</div>
+
+<main>
+  <section>
+    <h2 class="sec">The idea</h2>
+    <p class="sec-sub">
+      Normal desktops are mutable state machines. Every install, every update,
+      every shell one-liner nudges the system somewhere it has never been before —
+      and can never be again. Arasaka takes the opposite stance:
+    </p>
+    <div class="grid">
+      <div class="card cyan">
+        <div class="icon">🗜</div>
+        <h3>Immutable rootfs</h3>
+        <p>The active system is a read-only <b>squashfs</b>, integrity-checked with <b>dm-verity</b>. There is no package manager in the image, so nothing can silently mutate the OS while it runs.</p>
+      </div>
+      <div class="card magenta">
+        <div class="icon">🔏</div>
+        <h3>Signed from firmware up</h3>
+        <p>Boot is a chain of <b>signed Unified Kernel Images</b> verified by <b>Secure Boot</b>. The LUKS2 root key is sealed to <b>PCR 7 + PCR 11</b>, so only this exact image can unlock this device.</p>
+      </div>
+      <div class="card green">
+        <div class="icon">🔄</div>
+        <h3>Two slots, zero risk</h3>
+        <p>Updates install into the inactive <b>A/B slot</b>, then the bootloader flips. On failure the previous slot boots automatically — rollback is a reboot, not a rescue mission.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec">Architecture</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Boot chain</h3>
+        <p><b>systemd-boot → signed UKI (kernel+initramfs+cmdline)</b> → LUKS2 unlock via TPM2 → squashfs+verity rootfs mount. Hash failures refuse to boot; verity handles on-disk corruption.</p>
+      </div>
+      <div class="card">
+        <h3>Updates</h3>
+        <p><b>RAUC</b> writes the new slot, marks it pending, reboots, and the bootloader switches. The update client checks <b>B2 first</b>, falls back to the <b>GitHub rolling release</b> automatically.</p>
+      </div>
+      <div class="card">
+        <h3>Storage split</h3>
+        <p>Small <b>/boot</b>, immutable <b>/usr</b>, and a dedicated <b>/data</b> partition holding the key <b>bind-mounts</b> (<code>/home</code>, <code>/etc</code>, <code>/var</code>) — your data survives every update.</p>
+      </div>
+      <div class="card">
+        <h3>Build pipeline</h3>
+        <p>One CI build produces the <b>OTA bundle</b> and the <b>live ISO</b> from the same rootfs, each carrying <b>sha256</b> and <b>gpg</b> signatures that the device verifies before applying.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>ARASAKA · about · <a href="https://github.com/arasaka-cpu/arasaka" target="_blank" rel="noopener">source</a></p>
+</footer>
+
+<script src="assets/js/loader.js" defer></script>
+</body>
+</html>

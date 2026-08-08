@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARASAKA — a hardened, immutable desktop OS</title>
+<meta name="description" content="Arasaka is an immutable, hardening-focused Arch + COSMIC desktop OS with signed UKI Secure Boot, LUKS2 + TPM2 encryption, and atomic dual-source OTA updates.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ff2e88' d='M12 2 2 22h20Z'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="scanlines">
+<canvas id="bg" aria-hidden="true"></canvas>
+
+<nav>
+  <a class="logo" href="index.html"><span class="tri">▲</span>ARASAKA</a>
+  <ul>
+    <li><a class="link" href="index.html" aria-current="page">Home</a></li>
+    <li><a class="link" href="about.html">About</a></li>
+    <li><a class="link" href="missions.html">Missions</a></li>
+    <li><a class="link" href="download.html">Download</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <span class="badge">● build pipeline live</span>
+  <h1>ARASAKA<span class="cursor">_</span></h1>
+  <p class="tagline">
+    An <b>immutable, hardening-focused desktop OS</b> built on Arch + COSMIC.<br>
+    Signed UKI Secure Boot, <b>LUKS2 + TPM2</b> encryption, atomic <b>A/B dual-source OTA</b>.
+    No package manager on the device. Nothing to break, nothing to mutate.
+  </p>
+</div>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span><b>▲</b> SIGNED UKI</span>
+    <span><b>▲</b> LUKS2 + TPM2</span>
+    <span><b>▲</b> DUAL-SOURCE OTA</span>
+    <span><b>▲</b> IMMUTABLE ROOTFS</span>
+    <span><b>▲</b> ROLLING RELEASES</span>
+    <span><b>▲</b> <b>▲</b> SIGNED UKI</span>
+    <span><b>▲</b> LUKS2 + TPM2</span>
+    <span><b>▲</b> DUAL-SOURCE OTA</span>
+    <span><b>▲</b> IMMUTABLE ROOTFS</span>
+    <span><b>▲</b> ROLLING RELEASES</span>
+  </div>
+</div>
+
+<main>
+  <section>
+    <h2 class="sec">The pitch</h2>
+    <p class="sec-sub">
+      Arasaka is a desktop OS you cannot wreck by accident. The root filesystem is
+      immutable, the boot chain is signed, your disk is sealed to the hardware's TPM,
+      and updates are atomic — either you get the whole new system, or the old one.
+    </p>
+    <div class="grid">
+      <div class="card cyan">
+        <div class="icon">🛡</div>
+        <h3>Hardened core</h3>
+        <p>Per-slot signed <b>Unified Kernel Images</b> enforced with <b>Secure Boot</b>. If it didn't come from our signing key, it doesn't run.</p>
+      </div>
+      <div class="card magenta">
+        <div class="icon">🔐</div>
+        <h3>Sealed storage</h3>
+        <p><b>LUKS2</b> encryption on <b>/data</b>, auto-unlocked by the <b>TPM2</b> (PCR 7+11) with recovery-key fallback. Re-seal and heal on every boot.</p>
+      </div>
+      <div class="card green">
+        <div class="icon">⚡</div>
+        <h3>Atomic updates</h3>
+        <p><b>A/B RAUC</b> slots + dual-source OTA. Bundles ship on <b>B2</b>, auto-fall back to a <b>GitHub rolling release</b>. One-reboot rollback.</p>
+      </div>
+      <div class="card amber">
+        <div class="icon">🖥</div>
+        <h3>Dev / desktop ready</h3>
+        <p>Dev <b>/data</b> (no locking), <b>COSMIC</b> desktop, browser via the web. Snap to snap, each sealed slot is a self-contained system.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec">Why</h2>
+    <p class="sec-sub">
+      Most desktops mutate constantly — packages land, configs drift, and one bad
+      command can brick an evening. Arasaka flips the model: the system is a
+      disposable, verifiable artifact.
+    </p>
+    <div class="grid">
+      <div class="card">
+        <div class="icon cyan">🧱</div>
+        <h3>Immutable by design</h3>
+        <p><b>squashfs + verity</b> rootfs, read-only. There's no pacman in the image, no shell into /usr. If you can't touch it, you can't break it.</p>
+      </div>
+      <div class="card">
+        <div class="icon magenta">📦</div>
+        <h3>Built once, shipped twice</h3>
+        <p>A single CI pipeline produces both the <b>OTA bundle</b> and the <b>live ISO</b>, each with <b>sha256 + gpg</b> signatures checked before anything runs.</p>
+      </div>
+      <div class="card">
+        <div class="icon green">🧠</div>
+        <h3>Fail safe</h3>
+        <p>Boot failures auto-rollback to the last good slot. Updates are fully applied before switching, so a bad release never strands your device.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>ARASAKA · <a href="https://github.com/arasaka-cpu/arasaka" target="_blank" rel="noopener">github.com/arasaka-cpu/arasaka</a> · signed UKI · dual-source OTA</p>
+</footer>
+
+<script src="assets/js/loader.js" defer></script>
+</body>
+</html>

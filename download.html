@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Download — ARASAKA</title>
+<meta name="description" content="Download Arasaka: rolling release ISO assets on GitHub and the Backblaze B2 mirror, with install instructions.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ff2e88' d='M12 2 2 22h20Z'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="scanlines">
+<canvas id="bg" aria-hidden="true"></canvas>
+
+<nav>
+  <a class="logo" href="index.html"><span class="tri">▲</span>ARASAKA</a>
+  <ul>
+    <li><a class="link" href="index.html">Home</a></li>
+    <li><a class="link" href="about.html">About</a></li>
+    <li><a class="link" href="missions.html">Missions</a></li>
+    <li><a class="link" href="download.html" aria-current="page">Download</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <span class="badge">● rolling channel</span>
+  <h1 class="glitch" data-text="DOWNLOAD">DOWNLOAD</h1>
+  <p class="sub">
+    Everything ships to two mirrors: the GitHub rolling release (primary, split
+    into parts) and the Backblaze B2 bucket (direct link). Releases are rolling
+    and signed.
+  </p>
+</div>
+
+<main>
+  <section class="dl-block">
+    <h2 class="sec">Mirrors</h2>
+    <div class="grid">
+      <div class="card cyan">
+        <div class="icon">⬇</div>
+        <h3>GitHub rolling release</h3>
+        <p>Rolling assets: <code>arasaka-&lt;date&gt;.iso.part.NN</code> files plus a <code>.parts.json</code> manifest with sizes and sha256.</p>
+        <a class="big-btn" href="https://github.com/arasaka-cpu/arasaka/releases/tag/rolling" target="_blank" rel="noopener">Open release →</a>
+      </div>
+      <div class="card magenta">
+        <div class="icon">🗄</div>
+        <h3>B2 direct mirror</h3>
+        <p>Files also land on Backblaze B2 (bucket <code>arasaka-updates</code>), reachable directly at the URL below.</p>
+        <a class="big-btn" href="https://f005.backblazeb2.com/file/arasaka-updates/" target="_blank" rel="noopener">Browse bucket →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="dl-block">
+    <h2 class="sec">Direct links</h2>
+    <p><b>Latest ISO (B2, public):</b></p>
+    <div class="code-box">https://f005.backblazeb2.com/file/arasaka-updates/arasaka-20260807.iso</div>
+    <p><b>Update pointer (latest.json):</b></p>
+    <div class="code-box">https://f005.backblazeb2.com/file/arasaka-updates/update/stable/latest.json</div>
+    <p><b>Rolling release on GitHub:</b></p>
+    <div class="code-box">https://github.com/arasaka-cpu/arasaka/releases/tag/rolling</div>
+  </section>
+
+  <section class="dl-block">
+    <h2 class="sec">Install</h2>
+    <p><b>1 · Assemble split parts (GitHub assets only):</b></p>
+    <div class="code-box">cat arasaka-*.iso.part.* > arasaka.iso</div>
+    <p><b>2 · Verify the sha256 from the .parts.json manifest:</b></p>
+    <div class="code-box">sha256sum arasaka.iso
+# compare with the manifest value — signatures matter</div>
+    <p><b>3 · Write to USB:</b></p>
+    <div class="code-box">sudo dd if=arasaka.iso of=/dev/sdX bs=4M status=progress oflag=sync</div>
+    <p><b>4 · Boot the ISO in UEFI mode</b> — Secure Boot on, this is not a suggestion. The live system lets you flash the image or run the installer.</p>
+  </section>
+
+  <section class="dl-block">
+    <h2 class="sec">Notes</h2>
+    <p>
+      Files exceeding GitHub's 2&nbsp;GiB per-asset cap are split into 1&nbsp;GiB
+      <code>.part.NN</code> chunks with a manifest. Prefer the <b>B2 direct ISO</b>
+      when a single-file download is easier — same bits, same sha256, one URL.
+      <b>OTAs</b> (devices already running Arasaka) never touch this page; the
+      device fetches signed bundles itself.
+    </p>
+  </section>
+</main>
+
+<footer>
+  <p>ARASAKA · download · <a href="https://github.com/arasaka-cpu/arasaka/releases/tag/rolling" target="_blank" rel="noopener">rolling release</a> · <a href="https://github.com/arasaka-cpu/arasaka" target="_blank" rel="noopener">source</a></p>
+</footer>
+
+<script src="assets/js/loader.js" defer></script>
+</body>
+</html>

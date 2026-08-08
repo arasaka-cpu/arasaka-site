@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Missions — ARASAKA</title>
+<meta name="description" content="Arasaka mission log: what is done, what's in progress, and what's next for the immutable Arch desktop OS.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ff2e88' d='M12 2 2 22h20Z'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="scanlines">
+<canvas id="bg" aria-hidden="true"></canvas>
+
+<nav>
+  <a class="logo" href="index.html"><span class="tri">▲</span>ARASAKA</a>
+  <ul>
+    <li><a class="link" href="index.html">Home</a></li>
+    <li><a class="link" href="about.html">About</a></li>
+    <li><a class="link" href="missions.html" aria-current="page">Missions</a></li>
+    <li><a class="link" href="download.html">Download</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <span class="badge">● mission log</span>
+  <h1 class="glitch" data-text="MISSIONS">MISSIONS</h1>
+  <p class="sub">
+    The current state of the project, tracked mission by mission. Progress bars
+    are pure CSS — the only JS on this page is the WASM background.
+  </p>
+</div>
+
+<main>
+  <section>
+    <h2 class="sec">Status</h2>
+    <p class="sec-sub">
+      The live build pipeline is <b>running</b> (CI run <a href="https://github.com/arasaka-cpu/arasaka/actions/runs/31247591147" target="_blank" rel="noopener">#31247591147</a>).
+      Missions land in this order — as each completes, it flips from <span class="status next">NEXT</span> to <span class="status done">DONE</span>.
+    </p>
+  </section>
+
+  <section>
+    <h2 class="sec">Roadmap</h2>
+    <div class="timeline">
+      <div class="tl-item done">
+        <h3>Signed UKI + Secure Boot<span class="status done">DONE</span></h3>
+        <p>Per-slot kernels are replaced by signed Unified Kernel Images (ukify), with systemd-boot auto-registration and idempotent re-signing.</p>
+        <div class="bar"><div style="width:100%"></div></div>
+      </div>
+
+      <div class="tl-item done">
+        <h3>LUKS2 + TPM2 auto-unlock<span class="status done">DONE</span></h3>
+        <p>/data sealed to PCR 7+11, auto-unlocked at boot, recovery key + self-healing re-seal. Keys bind to this image and this hardware.</p>
+        <div class="bar"><div style="width:100%"></div></div>
+      </div>
+
+      <div class="tl-item done">
+        <h3>Dual-source OTA (B2 + GitHub rolling)<span class="status done">DONE</span></h3>
+        <p>RAUC A/B updates. Client prefers B2, auto-falls back to the GitHub rolling release, and heals the preferred source over time.</p>
+        <div class="bar"><div style="width:100%"></div></div>
+      </div>
+
+      <div class="tl-item done">
+        <h3>Immutable rootfs (squashfs + verity)<span class="status done">DONE</span></h3>
+        <p>Read-only, hash-verified rootfs. No package manager in the image; the system is a pure artifact.</p>
+        <div class="bar"><div style="width:100%"></div></div>
+      </div>
+
+      <div class="tl-item done">
+        <h3>Rolling release pipeline<span class="status done">DONE</span></h3>
+        <p>Nightly rolling builds produce split release assets on GitHub with a .parts.json manifest.</p>
+        <div class="bar"><div style="width:100%"></div></div>
+      </div>
+
+      <div class="tl-item next">
+        <h3>Public live-ISO images<span class="status next">NEXT</span></h3>
+        <p>Publish bootable ISOs to the GitHub rolling release and the B2 mirror for anyone to install.</p>
+        <div class="bar"><div style="width:30%"></div></div>
+      </div>
+
+      <div class="tl-item next">
+        <h3>Installer (calamares) pass-through<span class="status next">NEXT</span></h3>
+        <p>Wire the live environment's installer to build proper slots, seal TPM, and print the recovery key on this hardware.</p>
+        <div class="bar"><div style="width:15%"></div></div>
+      </div>
+
+      <div class="tl-item next">
+        <h3>Remote attestation dashboard<span class="status next">NEXT</span></h3>
+        <p>Report TPM PCR measurements + boot status per device, so you can see at a glance that the chain is intact.</p>
+        <div class="bar"><div style="width:5%"></div></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>ARASAKA · missions · <a href="https://github.com/arasaka-cpu/arasaka" target="_blank" rel="noopener">repo</a> · <a href="https://github.com/arasaka-cpu/arasaka/actions" target="_blank" rel="noopener">CI</a></p>
+</footer>
+
+<script src="assets/js/loader.js" defer></script>
+</body>
+</html>
