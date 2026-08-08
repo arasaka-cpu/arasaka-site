@@ -1,0 +1,20 @@
+name: deploy-worker
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'worker/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy Arasaka assembler worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy
+          workingDirectory: worker

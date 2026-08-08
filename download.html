@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Download — ARASAKA</title>
-<meta name="description" content="Download Arasaka: rolling release ISO assets on GitHub and the Backblaze B2 mirror, with install instructions.">
+<meta name="description" content="Download the Arasaka rolling ISO. One button: serves from Backblaze B2 when available, otherwise reassembles the GitHub parts via a CDN worker, verifies the sha256, and saves the image.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23ff2e88' d='M12 2 2 22h20Z'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -25,62 +25,71 @@
   <span class="badge">● rolling channel</span>
   <h1 class="glitch" data-text="DOWNLOAD">DOWNLOAD</h1>
   <p class="sub">
-    Everything ships to two mirrors: the GitHub rolling release (primary, split
-    into parts) and the Backblaze B2 bucket (direct link). Releases are rolling
-    and signed.
+    One button, no mirrors to pick from. It serves the current rolling image
+    from the fastest available source and verifies the sha256 before the file
+    is yours.
   </p>
 </div>
 
 <main>
   <section class="dl-block">
-    <h2 class="sec">Mirrors</h2>
+    <h2 class="sec">Get the image</h2>
+    <p id="dl-note">
+      <b>Arasaka rolling ISO</b> — a live installer image. ~4.6&nbsp;GiB.
+    </p>
+    <button id="dl-btn" class="big-btn" type="button">
+      <span class="tri">▼</span> Download Arasaka
+    </button>
+    <div id="dl-bar" class="bar" style="max-width:560px;margin-top:1.1rem">
+      <div id="dl-fill" style="width:0%"></div>
+    </div>
+    <p id="dl-status" style="margin-top:0.8rem;color:var(--text)">Ready.</p>
+    <p id="dl-detail" class="dim" style="font-family:var(--mono);font-size:0.8rem;word-break:break-all;max-width:72ch"></p>
+  </section>
+
+  <section class="dl-block">
+    <h2 class="sec">How it works</h2>
+    <p>
+      The button first asks the CDN worker for the current ISO manifest. If
+      <b>Backblaze B2</b> has the single-file image, it streams from there — no
+      assembly needed. If B2 is unreachable, the worker instead fetches the
+      GitHub release's split parts (each capped at 1&nbsp;GiB), reassembles them
+      in order, and streams the one ISO. Either way the browser hashes every
+      byte it receives and you see <b>verified</b> only when the sha256 matches
+      the release manifest.
+    </p>
+    <p>
+      No JavaScript runs the pretty page — only this button needs it, and the
+      heavy lifting (assembly, checksums) happens off-device or as a pure stream.
+    </p>
+  </section>
+
+  <section class="dl-block">
+    <h2 class="sec">Sources</h2>
     <div class="grid">
       <div class="card cyan">
-        <div class="icon">⬇</div>
-        <h3>GitHub rolling release</h3>
-        <p>Rolling assets: <code>arasaka-&lt;date&gt;.iso.part.NN</code> files plus a <code>.parts.json</code> manifest with sizes and sha256.</p>
-        <a class="big-btn" href="https://github.com/arasaka-cpu/arasaka/releases/tag/rolling" target="_blank" rel="noopener">Open release →</a>
+        <div class="icon">🗄</div>
+        <h3>Backblaze B2</h3>
+        <p>Bucket <code>arasaka-iso</code>, full single-file ISO, checked first. Fast CDN path when the bucket is public.</p>
       </div>
       <div class="card magenta">
-        <div class="icon">🗄</div>
-        <h3>B2 direct mirror</h3>
-        <p>Files also land on Backblaze B2 (bucket <code>arasaka-updates</code>), reachable directly at the URL below.</p>
-        <a class="big-btn" href="https://f005.backblazeb2.com/file/arasaka-updates/" target="_blank" rel="noopener">Browse bucket →</a>
+        <div class="icon">🧩</div>
+        <h3>GitHub rolling release</h3>
+        <p>Split <code>.part.NN</code> assets with a <code>.parts.json</code> manifest. Reassembled on the fly by the worker when B2 is down.</p>
+      </div>
+      <div class="card green">
+        <div class="icon">✓</div>
+        <h3>Verified, always</h3>
+        <p>sha256 is checked in your browser during the download. A mismatch is reported loudly — you never boot an unverified image.</p>
       </div>
     </div>
   </section>
 
   <section class="dl-block">
-    <h2 class="sec">Direct links</h2>
-    <p><b>Latest ISO (B2, public):</b></p>
-    <div class="code-box">https://f005.backblazeb2.com/file/arasaka-updates/arasaka-20260807.iso</div>
-    <p><b>Update pointer (latest.json):</b></p>
-    <div class="code-box">https://f005.backblazeb2.com/file/arasaka-updates/update/stable/latest.json</div>
-    <p><b>Rolling release on GitHub:</b></p>
-    <div class="code-box">https://github.com/arasaka-cpu/arasaka/releases/tag/rolling</div>
-  </section>
-
-  <section class="dl-block">
     <h2 class="sec">Install</h2>
-    <p><b>1 · Assemble split parts (GitHub assets only):</b></p>
-    <div class="code-box">cat arasaka-*.iso.part.* > arasaka.iso</div>
-    <p><b>2 · Verify the sha256 from the .parts.json manifest:</b></p>
-    <div class="code-box">sha256sum arasaka.iso
-# compare with the manifest value — signatures matter</div>
-    <p><b>3 · Write to USB:</b></p>
-    <div class="code-box">sudo dd if=arasaka.iso of=/dev/sdX bs=4M status=progress oflag=sync</div>
-    <p><b>4 · Boot the ISO in UEFI mode</b> — Secure Boot on, this is not a suggestion. The live system lets you flash the image or run the installer.</p>
-  </section>
-
-  <section class="dl-block">
-    <h2 class="sec">Notes</h2>
-    <p>
-      Files exceeding GitHub's 2&nbsp;GiB per-asset cap are split into 1&nbsp;GiB
-      <code>.part.NN</code> chunks with a manifest. Prefer the <b>B2 direct ISO</b>
-      when a single-file download is easier — same bits, same sha256, one URL.
-      <b>OTAs</b> (devices already running Arasaka) never touch this page; the
-      device fetches signed bundles itself.
-    </p>
+    <p><b>1 · Write to USB:</b></p>
+    <div class="code-box">sudo dd if=arasaka-&lt;date&gt;.iso of=/dev/sdX bs=4M status=progress oflag=sync</div>
+    <p><b>2 · Boot the ISO in UEFI mode</b> — Secure Boot on, this is not a suggestion. The live system lets you flash the image or run the installer.</p>
   </section>
 </main>
 
@@ -89,5 +98,6 @@
 </footer>
 
 <script src="assets/js/loader.js" defer></script>
+<script src="assets/js/download.js" defer></script>
 </body>
 </html>
