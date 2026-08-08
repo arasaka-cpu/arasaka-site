@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://arasaka-cpu.github.io/arasaka-site/sitemap.xml
