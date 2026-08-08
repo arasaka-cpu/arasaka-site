@@ -56,13 +56,13 @@
   <section class="dl-block">
     <h2 class="sec">How it works</h2>
     <p>
-      The button first asks the CDN worker for the current ISO manifest. If
-      <b>Backblaze B2</b> has the single-file image, it streams from there — no
-      assembly needed. If B2 is unreachable, the worker instead fetches the
-      GitHub release's split parts (each capped at 1&nbsp;GiB), reassembles them
-      in order, and streams the one ISO. Either way the browser hashes every
-      byte it receives and you see <b>verified</b> only when the sha256 matches
-      the release manifest.
+      The button asks the CDN worker for the current ISO manifest. The worker
+      streams the single-file image from <b>Backblaze B2</b> (server-side, no
+      browser CORS needed), falling back to reassembling the GitHub release's
+      split parts (each capped at 1&nbsp;GiB) when B2 is unreachable. Either way
+      the browser hashes every byte it receives and you see <b>verified</b>
+      only when the byte count matches the manifest <i>and</i> the sha256
+      matches the release.
     </p>
     <p>
       No JavaScript runs the pretty page — only this button needs it, and the
@@ -76,12 +76,12 @@
       <div class="card cyan">
         <div class="icon">🗄</div>
         <h3>Backblaze B2</h3>
-        <p>Bucket <code>arasaka-iso</code>, full single-file ISO, checked first. Fast CDN path when the bucket is public.</p>
+        <p>Bucket <code>arasaka-iso</code>, full single-file ISO. Streamed by the worker server-side (no browser CORS needed).</p>
       </div>
       <div class="card magenta">
         <div class="icon">🧩</div>
         <h3>GitHub rolling release</h3>
-        <p>Split <code>.part.NN</code> assets with a <code>.parts.json</code> manifest. Reassembled on the fly by the worker when B2 is down.</p>
+        <p>Split <code>.part.NN</code> assets with a <code>.parts.json</code> manifest. Reassembled on the fly by the worker as a fallback.</p>
       </div>
       <div class="card green">
         <div class="icon">✓</div>

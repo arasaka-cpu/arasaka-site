@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ARASAKA — a hardened, immutable desktop OS</title>
-<meta name="description" content="Arasaka is an immutable, hardening-focused Arch + COSMIC desktop Linux OS with signed UKI Secure Boot, LUKS2 + TPM2 encryption, and atomic dual-source OTA updates.">
+<meta name="description" content="Arasaka is an immutable, hardening-focused Arch + COSMIC desktop Linux OS with signed UKI Secure Boot, LUKS2 + TPM2 encryption, and atomic multi-source OTA updates.">
 <meta name="keywords" content="arasaka, arasaka-os, arasaka os, linux, linux os, linux distro, desktop os, immutable os, immutable linux, arch linux, cosmic desktop, secure boot, tpm2, luks2, rolling release, open source">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ARASAKA">
@@ -32,7 +32,7 @@
   <h1>ARASAKA<span class="cursor">_</span></h1>
   <p class="tagline">
     An <b>immutable, hardening-focused desktop OS</b> built on Arch + COSMIC.<br>
-    Signed UKI Secure Boot, <b>LUKS2 + TPM2</b> encryption, atomic <b>A/B dual-source OTA</b>.
+    Signed UKI Secure Boot, <b>LUKS2 + TPM2</b> encryption, atomic <b>A/B multi-source OTA</b>.
     No package manager on the device. Nothing to break, nothing to mutate.
   </p>
 </div>
@@ -74,7 +74,7 @@
       <div class="card green">
         <div class="icon">⚡</div>
         <h3>Atomic updates</h3>
-        <p><b>A/B RAUC</b> slots + dual-source OTA. Bundles ship on <b>B2</b>, auto-fall back to a <b>GitHub rolling release</b>. One-reboot rollback.</p>
+        <p><b>A/B RAUC</b> slots + multi-source OTA. Bundles ship on <b>B2</b>, auto-fall back to a <b>GitHub rolling release</b>, then an <b>Internet Archive</b> mirror. One-reboot rollback.</p>
       </div>
       <div class="card amber">
         <div class="icon">🖥</div>
@@ -112,7 +112,7 @@
 </main>
 
 <footer>
-  <p>ARASAKA · <a href="https://github.com/arasaka-cpu/arasaka" target="_blank" rel="noopener">github.com/arasaka-cpu/arasaka</a> · signed UKI · dual-source OTA</p>
+  <p>ARASAKA · <a href="https://github.com/arasaka-cpu/arasaka" target="_blank" rel="noopener">github.com/arasaka-cpu/arasaka</a> · signed UKI · multi-source OTA</p>
 </footer>
 
 <script src="assets/js/loader.js" defer></script>
